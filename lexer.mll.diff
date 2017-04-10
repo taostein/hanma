@@ -1,0 +1,62 @@
+45a46
+>     "\229\129\154", DO; (* 做 *)
+46a48
+>     "\229\129\154\229\174\140", DONE; (* 做完 *)
+48a51
+>     "\229\144\166\229\136\153", ELSE; (* 否则 *)
+52a56
+>     "\229\129\135", FALSE; (* 假 *)
+53a58
+>     "\229\143\150", FOR; (* 取 *)
+54a60
+>     "\229\135\189", FUN; (* 函 *)
+55a62
+>     "\229\135\189\230\149\176", FUNCTION; (* 函数 *)
+57a65
+>     "\229\166\130\230\158\156", IF; (* 如果 *)
+58a67
+>     "\229\156\168", IN; (* 在 *)
+63a73
+>     "\232\174\190", LET; (* 设 *)
+64a75
+>     "\229\140\185\233\133\141", MATCH; (* 匹配 *)
+66a78
+>     "\230\168\161\229\157\151", MODULE; (* 模块 *)
+71a84
+>     "\231\154\132", OF; (* 的 *)
+72a86
+>     "\230\137\147\229\188\128", OPEN; (* 打开 *)
+76a91
+>     "\233\128\146\229\189\146", REC; (* 递归 *)
+79a95
+>     "\233\130\163\228\185\136", THEN; (* 那么 *)
+80a97
+>     "\229\136\176", TO; (* 到 *)
+81a99
+>     "\231\156\159", TRUE; (* 真 *)
+83a102
+>     "\231\177\187\229\158\139", TYPE; (* 类型 *)
+87a107
+>     "\229\189\147", WHILE; (* 当 *)
+88a109
+>     "\232\183\159", WITH; (* 跟 *)
+92a114
+>     "\230\177\130\228\189\153", INFIXOP3("mod");
+313a336,342
+> (* 汉字 (Chinese) identifiers *)
+> let idchar_zh_b1 = ['\228'-'\233']
+> let idchar_zh_b2 = ['\128'-'\191']
+> let idchar_zh_b3 = ['\128'-'\191']
+> let idchar_zh_extra = ['_' '0' - '9']
+> let uppercase_zh = "\229\141\156"
+> 
+349a379,387
+>   | uppercase_zh ((idchar_zh_b1 idchar_zh_b2 idchar_zh_b3) | idchar_zh_extra)* {
+>       (* Analog of capitalized keywords, prefixing with 卜 *)
+>       UIDENT(Lexing.lexeme lexbuf) }       
+>   | (idchar_zh_b1 idchar_zh_b2 idchar_zh_b3) 
+>     ((idchar_zh_b1 idchar_zh_b2 idchar_zh_b3) | idchar_zh_extra)* {
+>       let s = Lexing.lexeme lexbuf in
+>       try Hashtbl.find keyword_table s
+>       with Not_found -> LIDENT s
+>   }
